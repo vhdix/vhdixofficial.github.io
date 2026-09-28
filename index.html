@@ -1,75 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Demo web</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pocket FM Premium</title>
 
     <style>
-    .navigationbar {
-            display:flex;
-        list-style-type:none;
-        margin:0px;
-        padding:0px;
-        justify-content:center;
-        background-color:black;
-        text-transform:uppercase; 
-        
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
-        .navigationbar a
-        {
-            display:block;
-            padding: 14px 16px;
-text-decoration:none;
-color:white;       
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #141414, #292929);
+            color: white;
         }
-        p {
+
+        .container {
             text-align: center;
-            color: red;
-            font-size: 40px;
-            border-width:3px;
-            border-style:solid;
-            border-color:blue;
-            background-color: yellow;
+            padding: 40px 25px;
         }
 
-        #para-margin {
-            margin: 100px;
-            color: blue;
-            width: 200px;
+        h1 {
+            font-size: 38px;
+            margin-bottom: 15px;
         }
 
-        .p-padding {
-            padding: 20px;
+        p {
+            color: #cccccc;
+            font-size: 17px;
+            margin-bottom: 30px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: #ff3b30;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #ff554c;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            margin-top: 35px;
+            font-size: 13px;
+            color: #888;
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <div>
-        <h1> Vhdix-Demo </h1>
+    <div class="container">
+
+        <h1>🎧 Pocket FM Premium</h1>
+
+        <p>Get the Pocket FM Premium download here.</p>
+
+        <a
+            class="download-btn"
+            href="https://t.me/premiumapps121212"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Download
+        </a>
+
+        <div class="footer">
+            © 2026 Pocket FM Premium
         </div>
-        
-    </header>
-            <nav> 
-                <div>
-                <ul class="navigationbar">
-                    <li> <a href="#"> Home  </a> </li>
-                    <li> <a href="#" >Gallery  </a> </li>
-                    <li> <a href="#" >resources </a> </li>
-                    <li> <a href="#" >about  </a> </li>
-                    <li> <a href="#" >support</a> </li>
-                    <li> <a href="#" >account  </a> </li>
-                </ul>
-            </nav>
+
     </div>
-
-    <p id="para-margin" class="p-padding" style="border:10px solid green;">
-        CSS Class
-    </p>
-
-    <p>First Class</p>
 
 </body>
 </html>
