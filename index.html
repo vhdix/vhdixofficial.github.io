@@ -3,89 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Pocket FM Premium</title>
-
+    <title>Text Style Builder</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #3b82f6;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         body {
-            min-height: 100vh;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            background: linear-gradient(135deg, #141414, #292929);
-            color: white;
         }
 
-        .container {
+        /* Master Word Section */
+        .master-section {
+            background-color: var(--card-bg);
+            width: 100%;
+            padding: 20px;
+            border-radius: 16px;
             text-align: center;
-            padding: 40px 25px;
-        }
-
-        h1 {
-            font-size: 38px;
-            margin-bottom: 15px;
-        }
-
-        p {
-            color: #cccccc;
-            font-size: 17px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .download-btn {
-            display: inline-block;
-            padding: 15px 35px;
-            background: #ff3b30;
+        #masterWord {
+            width: 90%;
+            background: transparent;
+            border: 2px solid #334155;
+            color: var(--text);
+            font-size: 2.5rem;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #masterWord:focus {
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background-color: var(--accent);
             color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 18px;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0 5px;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover { opacity: 0.8; }
+        .btn-danger { background-color: #ef4444; }
+
+        /* Character Input Section */
+        .input-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        #charInput {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            text-align: center;
+            background-color: var(--card-bg);
+            color: var(--text);
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            text-transform: lowercase;
+            outline: none;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .char-display {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .style-name {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .download-btn:hover {
-            background: #ff554c;
-            transform: scale(1.05);
-        }
-
-        .footer {
-            margin-top: 35px;
-            font-size: 13px;
-            color: #888;
+            transition: bottom 0.3s;
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
-
-        <h1>🎧 Pocket FM Premium</h1>
-
-        <p>Get the Pocket FM Premium download here.</p>
-
-        <a
-            class="download-btn"
-            href="https://t.me/premiumapps121212"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            Download
-        </a>
-
-        <div class="footer">
-            © 2026 Pocket FM Premium
+    <div class="master-section">
+        <h2>Master Word Builder</h2>
+        <input type="text" id="masterWord" placeholder="Your word will appear here..." readonly>
+        <div>
+            <button class="btn" onclick="copyMasterWord()">Copy Word</button>
+            <button class="btn btn-danger" onclick="clearMasterWord()">Clear</button>
         </div>
-
     </div>
 
+    <div class="input-section">
+        <h3>Type a Character to see Styles</h3>
+        <input type="text" id="charInput" maxlength="1" placeholder="a">
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+        <!-- Cards will be generated here by JavaScript -->
+    </div>
+
+    <div id="toast">Copied!</div>
+
+    <script>
+        // Unicode style mappings (Using standard characters and their styled equivalents)
+        const alphabets = {
+            Normal: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            Bold: "𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙",
+            Italic: "𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍",
+            Script: "𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵",
+            Fraktur: "𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ",
+            DoubleStruck: "𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ",
+            Circled: "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏ",
+            Square: "🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉"
+        };
+
+        // Convert strings to arrays to safely handle 2-byte Unicode characters
+        const parsedStyles = {};
+        for (let key in alphabets) {
+            parsedStyles[key] = Array.from(alphabets[key]);
+        }
+
+        const charInput = document.getElementById('charInput');
+        const cardsGrid = document.getElementById('cardsGrid');
+        const masterWord = document.getElementById('masterWord');
+
+        // Generate cards when a letter is typed
+        charInput.addEventListener('input', (e) => {
+            const char = e.target.value;
+            generateCards(char);
+        });
+
+        function generateCards(char) {
+            cardsGrid.innerHTML = ''; // Clear previous cards
+            if (!char) return;
+
+            // Find the index of the typed character in the normal alphabet
+            const normalIndex = parsedStyles['Normal'].indexOf(char);
+
+            for (let styleName in parsedStyles) {
+                if (styleName === 'Normal') continue; // Skip standard text card
+
+                // Get the styled character, fallback to normal if it's a number/symbol
+                let styledChar = char; 
+                if (normalIndex !== -1) {
+                    styledChar = parsedStyles[styleName][normalIndex] || char;
+                }
+
+                // Create the HTML element for the card
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="char-display">${styledChar}</div>
+                    <div class="style-name">${styleName}</div>
+                `;
+                
+                // Add click functionality to append to master word
+                card.onclick = () => {
+                    masterWord.value += styledChar;
+                    showToast(`Added ${styledChar}`);
+                };
+
+                cardsGrid.appendChild(card);
+            }
+        }
+
+        function copyMasterWord() {
+            if (masterWord.value === '') return;
+            navigator.clipboard.writeText(masterWord.value).then(() => {
+                showToast("Word Copied to Clipboard!");
+            });
+        }
+
+        function clearMasterWord() {
+            masterWord.value = '';
+        }
+
+        // Simple toast notification system
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.bottom = '20px';
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.style.bottom = '-50px';
+            }, 2000);
+        }
+
+        // Initialize with 'a' on load
+        window.onload = () => {
+            charInput.value = 'a';
+            generateCards('a');
+        };
+    </script>
 </body>
 </html>
